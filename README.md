@@ -141,7 +141,7 @@ docker compose up -d
 
 # 3. Backend (na pasta do serviço; no Windows use mvnw.cmd)
 cd meunegocio360-core
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+.\mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
 # 4. Frontend (em outro terminal)
 cd meunegocio360-js
@@ -149,7 +149,15 @@ npm install
 npm run dev
 ```
 
-A descrição de cada variável está comentada em [`.env.example`](./.env.example) e em [`meunegocio360-js/.env.example`](./meunegocio360-js/.env.example). Com tudo no ar: backend em `http://localhost:8080` (Swagger UI em `/swagger-ui.html`) e frontend em `http://localhost:5173`. Endpoints e telas existem à medida que os requisitos são implementados.
+A descrição de cada variável está comentada em [`.env.example`](./.env.example) e em [`meunegocio360-js/.env.example`](./meunegocio360-js/.env.example). Com tudo no ar: backend em `http://localhost:8080` (Swagger UI em `/swagger-ui.html`, *health check* em `/actuator/health`) e frontend em `http://localhost:5173`. Endpoints e telas existem à medida que os requisitos são implementados.
+
+### Autenticação no ambiente local ([RF-BE-001](./docs/requisitos-be.md#rf-be-001--autenticação-de-usuário-login))
+
+- O backend **não sobe** sem `DB_URL`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET` (mínimo de 32 bytes) e `CORS_ALLOWED_ORIGINS`. No perfil `dev`, também são obrigatórias `SEED_ADMIN_SENHA` e `SEED_USUARIO_SENHA` (8 a 72 caracteres).
+- As migrations Flyway (`db/migration`) são aplicadas automaticamente na inicialização.
+- No perfil `dev`, o *seed* cria dois usuários fictícios: `admin@meunegocio360.com.br` (perfil `ADMIN`) e `usuario@meunegocio360.com.br` (perfil `USUARIO`), com as senhas definidas no seu `.env`.
+- Endpoints: `POST /api/v1/auth/login`, `POST /api/v1/auth/refresh`, `POST /api/v1/auth/logout` e `GET /api/v1/auth/me`. Todos os demais exigem `Authorization: Bearer <accessToken>`.
+- O refresh token trafega só no cookie `mn360_refresh` (`HttpOnly`, `SameSite=Strict`, `Path=/api/v1/auth`). Para testar com ferramentas como o Postman via HTTP, defina `APP_AUTH_COOKIE_SECURE=false` no `.env`; esse valor só é aceito no perfil `dev`.
 
 ### Comandos úteis
 

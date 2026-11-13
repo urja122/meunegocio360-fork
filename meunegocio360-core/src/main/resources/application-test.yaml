@@ -1,0 +1,5 @@
+# Perfil de testes: logs estruturados em JSON (RNF-BE-44).
+logging:
+  structured:
+    format:
+      console: ecs

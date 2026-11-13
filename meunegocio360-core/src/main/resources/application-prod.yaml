@@ -1,0 +1,14 @@
+# Perfil de produção: toda a configuração vem do ambiente (RNF-102).
+
+# Swagger/OpenAPI desabilitados em produção (RNF-030).
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# Logs estruturados em JSON (RNF-050, RNF-BE-44).
+logging:
+  structured:
+    format:
+      console: ecs

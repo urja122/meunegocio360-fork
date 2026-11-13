@@ -1,3 +1,74 @@
+# Configuração comum a todos os perfis (RNF-052).
+# Segredos e valores de ambiente vêm SEMPRE de variáveis de ambiente (RNF-022);
+# os nomes estão documentados no .env.example da raiz.
 spring:
   application:
     name: meunegocio360-core
+  datasource:
+    # Sem valor padrão: a aplicação não sobe sem as variáveis (RNF-BE-32).
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Schema evoluído só por Flyway (RNF-BE-20, RNF-BE-21).
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        type:
+          # Instant gravado como DATETIME(6) em UTC (RNF-BE-22).
+          preferred_instant_jdbc_type: TIMESTAMP
+  flyway:
+    locations: classpath:db/migration
+  mvc:
+    # O DevTools liga este log em dev; ele exibiria o valor rejeitado da senha (RNF-023).
+    log-resolved-exception: false
+
+server:
+  # RNF-101 / RNF-BE-31
+  port: ${PORT:8080}
+  error:
+    include-stacktrace: never
+    include-message: never
+
+# Health check público e sem detalhes (RNF-051, RNF-104).
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+logging:
+  pattern:
+    # Identificador de correlação nos logs de texto (RNF-BE-43).
+    level: "%5p [%X{requestId:-}]"
+
+app:
+  cors:
+    # Mesma lista usada no CORS e na verificação de Origin (RNF-BE-40, RNF-BE-42).
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+  auth:
+    # RN-04
+    max-tentativas: ${APP_AUTH_MAX_TENTATIVAS:5}
+    bloqueio-minutos: ${APP_AUTH_BLOQUEIO_MINUTOS:15}
+    jwt:
+      # Sem valor padrão: validado na inicialização (mínimo de 32 bytes, RNF-BE-32).
+      secret: ${JWT_SECRET:}
+      issuer: meunegocio360-core
+      # RN-05
+      expiracao-minutos: ${APP_AUTH_JWT_EXPIRACAO_MINUTOS:15}
+    refresh:
+      # RN-06
+      expiracao-dias: ${APP_AUTH_REFRESH_EXPIRACAO_DIAS:7}
+      # Remoção de tokens expirados/revogados há mais de 30 dias.
+      retencao-dias: 30
+      limpeza-cron: "0 0 3 * * *"
+    cookie:
+      # "false" só é aceito no perfil dev.
+      secure: ${APP_AUTH_COOKIE_SECURE:true}

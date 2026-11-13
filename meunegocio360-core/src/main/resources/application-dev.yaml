@@ -1,0 +1,11 @@
+# Perfil de desenvolvimento local.
+spring:
+  config:
+    # Importa o .env da raiz do repositório (RNF-BE-31). O .env nunca é versionado.
+    import: optional:file:../.env[.properties]
+
+app:
+  # Seed de desenvolvimento (RF-BE-001). Senhas lidas do ambiente; NUNCA em prod (RNF-BE-24).
+  seed:
+    admin-senha: ${SEED_ADMIN_SENHA:}
+    usuario-senha: ${SEED_USUARIO_SENHA:}
