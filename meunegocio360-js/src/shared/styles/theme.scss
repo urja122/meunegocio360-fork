@@ -1,0 +1,115 @@
+// Tema do Bootstrap 5 com a identidade do MeuNegocio360 (RNF-FE-07, RNF-FE-08).
+// Paleta, contraste e tipografia: docs/requisitos-fe.md, seção 2.
+
+@use 'sass:map';
+
+// 2.1 Paleta da marca
+$mn-laranja: #ec4e26;
+$mn-creme: #fcf5f0;
+$mn-cinza: #4a3f39;
+$mn-preto: #1f1612;
+$mn-laranja-claro: #cdbbae;
+
+@import 'bootstrap/scss/functions';
+
+// Cores de tema e feedback (2.1 e 2.2: $danger e $success com contraste AA sobre Creme)
+$primary: $mn-laranja;
+$danger: #b02a37;
+$success: #146c43;
+
+// Fundo, texto e bordas
+$body-bg: $mn-creme;
+$body-color: $mn-preto;
+$body-secondary-color: $mn-cinza;
+$border-color: $mn-cinza;
+$card-bg: $mn-creme;
+$card-border-color: $mn-cinza;
+$table-border-color: $mn-cinza;
+
+// Botão primário com texto Preto sobre Laranja (2.2): o Bootstrap escolhe o texto pelo contraste
+$min-contrast-ratio: 4.5;
+$color-contrast-dark: $mn-preto;
+
+// Links em Preto e sempre sublinhados (Laranja sobre Creme não atinge 4,5:1)
+$link-color: $mn-preto;
+$link-hover-color: $mn-cinza;
+$link-decoration: underline;
+
+// Foco com contraste mínimo de 3:1 contra o fundo (2.2, RNF-FE-23)
+$focus-ring-color: rgba($mn-preto, 0.8);
+$input-btn-focus-color: rgba($mn-preto, 0.8);
+$input-focus-border-color: $mn-preto;
+
+// 2.3 Tipografia (fontes auto-hospedadas via @fontsource, importadas em main.jsx)
+$font-family-sans-serif:
+  'Barlow',
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Arial,
+  sans-serif;
+$headings-font-family: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
+$headings-font-weight: 600;
+$font-size-base: 1rem;
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+
+// Cor do rodapé (gera bg-footer, text-footer etc.)
+$theme-colors: map.merge(
+  $theme-colors,
+  (
+    'footer': $mn-laranja-claro,
+  )
+);
+
+// Restante do Bootstrap, na mesma ordem de bootstrap/scss/bootstrap.scss
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/dropdown';
+@import 'bootstrap/scss/button-group';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/accordion';
+@import 'bootstrap/scss/breadcrumb';
+@import 'bootstrap/scss/pagination';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/alert';
+@import 'bootstrap/scss/progress';
+@import 'bootstrap/scss/list-group';
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/toasts';
+@import 'bootstrap/scss/modal';
+@import 'bootstrap/scss/tooltip';
+@import 'bootstrap/scss/popover';
+@import 'bootstrap/scss/carousel';
+@import 'bootstrap/scss/spinners';
+@import 'bootstrap/scss/offcanvas';
+@import 'bootstrap/scss/placeholders';
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities/api';
+
+// ---------------------------------------------------------------------------
+// Estilos próprios: apenas o que o Bootstrap não cobre, com variáveis do tema.
+// ---------------------------------------------------------------------------
+
+// Logo da tela de login: o PNG tem margens transparentes largas; recorta só a faixa central.
+.login-logo {
+  width: 100%;
+  height: $spacer * 6;
+  object-fit: cover;
+}

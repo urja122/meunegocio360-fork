@@ -159,6 +159,12 @@ A descrição de cada variável está comentada em [`.env.example`](./.env.examp
 - Endpoints: `POST /api/v1/auth/login`, `POST /api/v1/auth/refresh`, `POST /api/v1/auth/logout` e `GET /api/v1/auth/me`. Todos os demais exigem `Authorization: Bearer <accessToken>`.
 - O refresh token trafega só no cookie `mn360_refresh` (`HttpOnly`, `SameSite=Strict`, `Path=/api/v1/auth`). Para testar com ferramentas como o Postman via HTTP, defina `APP_AUTH_COOKIE_SECURE=false` no `.env`; esse valor só é aceito no perfil `dev`.
 
+### Login no frontend ([RF-FE-001](./docs/requisitos-fe.md#rf-fe-001--fluxo-de-login-do-usuário))
+
+- Com o backend em `http://localhost:8080`, rode `npm run dev` em `meunegocio360-js` e abra `http://localhost:5173`: sem sessão, você é levado a `/login`; após entrar, à página inicial (`/`), com o botão **Sair**.
+- O navegador chama a API sempre por `/api/v1` (mesma origem); em desenvolvimento, o `server.proxy` do Vite (`vite.config.js`) repassa `/api` para a porta 8080. O `.env.local` é opcional: o padrão já é `VITE_API_BASE_URL=/api/v1`.
+- A sessão sobrevive ao recarregar a página porque o app chama `/auth/refresh` com o cookie `HttpOnly` na inicialização. O token de acesso fica só em memória, nunca em `localStorage`.
+
 ### Comandos úteis
 
 | Onde | Comando | Para quê |
